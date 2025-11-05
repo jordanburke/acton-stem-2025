@@ -5,66 +5,32 @@ import { ControlsPanel } from "./components/ControlsPanel"
 import { Globe } from "./components/Globe"
 import { InfoPanel } from "./components/InfoPanel"
 import { convertEarthquakesToPoints, fetchEarthquakeData, getEarthquakeStats } from "./data/earthquakes"
+import { convertMountainsToPoints, getMountainStats } from "./data/mountains"
 import type { GlobePoint } from "./data/types"
-
-const SAMPLE_DATA: GlobePoint[] = [
-  {
-    lat: 40.7128,
-    lng: -74.006,
-    size: 0.05,
-    color: "#ff6b6b",
-    label: "New York City",
-    data: { city: "New York" },
-  },
-  {
-    lat: 51.5074,
-    lng: -0.1278,
-    size: 0.05,
-    color: "#4ecdc4",
-    label: "London",
-    data: { city: "London" },
-  },
-  {
-    lat: 35.6762,
-    lng: 139.6503,
-    size: 0.05,
-    color: "#45b7d1",
-    label: "Tokyo",
-    data: { city: "Tokyo" },
-  },
-  {
-    lat: -33.8688,
-    lng: 151.2093,
-    size: 0.05,
-    color: "#96ceb4",
-    label: "Sydney",
-    data: { city: "Sydney" },
-  },
-  {
-    lat: 37.7749,
-    lng: -122.4194,
-    size: 0.05,
-    color: "#ffeaa7",
-    label: "San Francisco",
-    data: { city: "San Francisco" },
-  },
-]
+import { convertWildfiresToPoints, fetchWildfireData, getWildfireStats } from "./data/wildfires"
 
 export function App() {
-  const [dataset, setDataset] = useState<string>("sample")
+  const [dataset, setDataset] = useState<string>("mountains")
   const [rotationSpeed, setRotationSpeed] = useState<number>(0.5)
-  const [points, setPoints] = useState<GlobePoint[]>(SAMPLE_DATA)
+  const [points, setPoints] = useState<GlobePoint[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [stats, setStats] = useState<{
     total: number
     maxMagnitude?: number
     avgMagnitude?: number
-  }>({ total: SAMPLE_DATA.length })
+  }>({ total: 0 })
 
   const handleLoadData = async () => {
-    if (dataset === "sample") {
-      setPoints(SAMPLE_DATA)
-      setStats({ total: SAMPLE_DATA.length })
+    if (dataset === "mountains") {
+      const mountainPoints = convertMountainsToPoints()
+      const mountainStats = getMountainStats()
+
+      setPoints(mountainPoints)
+      setStats({
+        total: mountainStats.total,
+        maxMagnitude: mountainStats.maxElevation,
+        avgMagnitude: mountainStats.avgElevation,
+      })
     } else if (dataset === "earthquakes") {
       setLoading(true)
       try {
@@ -80,6 +46,24 @@ export function App() {
         })
       } catch (error) {
         console.error("Failed to load earthquake data:", error)
+      } finally {
+        setLoading(false)
+      }
+    } else if (dataset === "wildfires") {
+      setLoading(true)
+      try {
+        const wildfireData = await fetchWildfireData()
+        const wildfirePoints = convertWildfiresToPoints(wildfireData)
+        const wildfireStats = getWildfireStats(wildfireData)
+
+        setPoints(wildfirePoints)
+        setStats({
+          total: wildfireStats.total,
+          maxMagnitude: wildfireStats.maxFRP,
+          avgMagnitude: wildfireStats.avgFRP,
+        })
+      } catch (error) {
+        console.error("Failed to load wildfire data:", error)
       } finally {
         setLoading(false)
       }

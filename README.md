@@ -1,115 +1,173 @@
-## typescript-library-template
+# 3D Globe Data Visualization - ACTON STEM
 
-[![Node.js CI](https://github.com/jordanburke/typescript-library-template/actions/workflows/node.js.yml/badge.svg)](https://github.com/jordanburke/typescript-library-template/actions/workflows/node.js.yml)
-[![CodeQL](https://github.com/jordanburke/typescript-library-template/actions/workflows/codeql.yml/badge.svg)](https://github.com/jordanburke/typescript-library-template/actions/workflows/codeql.yml)
-
-A modern TypeScript library template with standardized build scripts and tooling.
+An interactive 3D Earth globe visualizing real-world datasets including earthquakes and wildfires. Built for ACTON STEM educational exhibit to showcase AI-assisted development.
 
 ## Features
 
-- **Modern Build System**: [tsup](https://tsup.egoist.dev/) for fast bundling with TypeScript support
-- **Testing**: [Vitest](https://vitest.dev/) with coverage reporting and UI
-- **Code Quality**: ESLint + Prettier with automatic formatting and fixing
-- **Dual Format**: Outputs both CommonJS and ES modules with proper TypeScript declarations
-- **Standardized Scripts**: Consistent commands across all projects
+- **Interactive 3D Globe**: Rotate and zoom with mouse/touch controls
+- **Real-time Earthquake Data**: USGS data for the last 30 days with magnitude-based visualization
+- **Wildfire Detection**: NASA FIRMS satellite fire data with Fire Radiative Power (FRP) metrics
+- **Dynamic Statistics**: Live stats panel showing dataset metrics
+- **Responsive Controls**: Dataset selection and rotation speed adjustment
 
 ## Quick Start
 
-1. **Use this template** to create a new repository
-2. **Clone your new repository**
-3. **Install dependencies**: `pnpm install`
-4. **Start developing**: `pnpm dev` (builds with watch mode)
-5. **Before committing**: `pnpm run validate` (format + lint + test + build)
+```bash
+# Install dependencies
+pnpm install
+
+# Start development server
+pnpm dev
+
+# Build for production
+pnpm build
+```
 
 ## Development Commands
 
-### Pre-Checkin Command
+### Main Commands
 
-```bash
-pnpm run validate  # 🚀 Main command: format, lint, test, and build everything
+- `pnpm dev` - Start development server (http://localhost:3000)
+- `pnpm build` - Production build
+- `pnpm preview` - Preview production build
+
+### Code Quality
+
+- `pnpm validate` - **Pre-commit check**: format, lint, test, and build
+- `pnpm format` - Format code with Prettier
+- `pnpm lint` - Fix ESLint issues
+- `pnpm test` - Run tests with Vitest
+- `pnpm test:coverage` - Run tests with coverage report
+
+## NASA FIRMS Wildfire Data Setup
+
+The wildfire dataset requires a free NASA FIRMS API key.
+
+### Getting Your API Key
+
+1. Visit: https://firms.modaps.eosdis.nasa.gov/api/area/
+2. Sign up for a free account
+3. Request an API key (instant approval)
+
+### Configuring the API Key
+
+#### Option 1: Environment Variable (Recommended)
+
+Create a `.env` file in the project root:
+
+```env
+VITE_NASA_FIRMS_API_KEY=your_api_key_here
 ```
 
-### Individual Commands
+#### Option 2: Direct Configuration
 
-```bash
-# Formatting
-pnpm format        # Format code with Prettier
-pnpm format:check  # Check formatting without writing
+Edit `src/data/wildfires.ts` and replace the environment variable:
 
-# Linting
-pnpm lint          # Fix ESLint issues
-pnpm lint:check    # Check ESLint issues without fixing
-
-# Testing
-pnpm test          # Run tests once
-pnpm test:watch    # Run tests in watch mode
-pnpm test:coverage # Run tests with coverage report
-pnpm test:ui       # Launch Vitest UI
-
-# Building
-pnpm build         # Production build
-pnpm build:watch   # Build with watch mode
-pnpm dev           # Development mode (alias for build:watch)
-
-# Type Checking
-pnpm ts-types      # Check TypeScript types
+```typescript
+const NASA_FIRMS_API_KEY = "your_api_key_here"
 ```
 
-## Publishing
+### Without API Key
 
-The template automatically runs `pnpm run validate` before publishing via the `prepublishOnly` script, ensuring your package is properly formatted, linted, tested, and built.
+The app will automatically use sample wildfire data (5 demo fires) if no API key is configured.
 
-```bash
-pnpm publish --access public
-```
+## Tech Stack
+
+- **React 18** - UI framework
+- **Mantine UI 7** - Component library with dark theme
+- **Three.js** - 3D graphics engine
+- **Globe.gl** - 3D globe visualization
+- **Vite** - Build tool and dev server
+- **TypeScript** - Type-safe development
+
+## Data Sources
+
+### Earthquakes (No API Key Required)
+
+- **Source**: USGS Earthquake Hazards Program
+- **API**: https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson
+- **Coverage**: Last 30 days, worldwide
+- **Update Frequency**: Real-time (updates every minute)
+
+### Wildfires (API Key Required)
+
+- **Source**: NASA FIRMS (Fire Information for Resource Management System)
+- **Sensor**: VIIRS S-NPP (375m resolution)
+- **Coverage**: Last 24 hours, worldwide
+- **Update Frequency**: Near real-time (every 3-5 hours)
 
 ## Project Structure
 
 ```
 src/
-├── index.ts          # Main library entry point
-test/
-├── *.spec.ts         # Test files
-dist/                 # Built output (CommonJS + ES modules + types)
+├── components/          # React components
+│   ├── Globe.tsx       # Globe wrapper component
+│   ├── ControlsPanel.tsx # Dataset and rotation controls
+│   └── InfoPanel.tsx   # Statistics display
+├── data/               # Data fetching and processing
+│   ├── earthquakes.ts  # USGS earthquake data
+│   ├── wildfires.ts    # NASA FIRMS wildfire data
+│   └── types.ts        # Shared TypeScript types
+├── globe/              # Globe rendering logic
+│   └── GlobeRenderer.ts # Three.js globe setup
+├── App.tsx             # Main application component
+└── main.tsx            # Application entry point
 ```
 
-## Tooling
+## Visualization Details
 
-- **Build**: [tsup](https://tsup.egoist.dev/) - Fast TypeScript bundler
-- **Test**: [Vitest](https://vitest.dev/) - Fast unit test framework
-- **Lint**: [ESLint](https://eslint.org/) with TypeScript support
-- **Format**: [Prettier](https://prettier.io/) with ESLint integration
-- **Package Manager**: [pnpm](https://pnpm.io/) for fast, efficient installs
+### Earthquakes
 
-## Claude Code Skill
+- **Color Scale**: Green (micro) → Yellow (minor) → Orange (moderate) → Red (major)
+- **Size**: Exponentially scaled by magnitude (M^1.5)
+- **Data Points**: 7,000+ earthquakes from last 30 days
+- **Tooltips**: Magnitude, depth, location, time, tsunami warnings
 
-This repository includes a Claude Code skill to help you apply these standards to other projects:
+### Wildfires
 
-**Location**: `.claude/skills/typescript-standards/`
+- **Color Scale**: Gold (low FRP) → Orange → Red (extreme FRP)
+- **Size**: Logarithmically scaled by Fire Radiative Power
+- **Data Points**: Active fires detected in last 24 hours
+- **Tooltips**: FRP, brightness, confidence, satellite, day/night detection
 
-**Usage**: When using Claude Code, the skill automatically provides guidance for:
+## Browser Support
 
-- Creating new libraries from this template
-- Applying these standards to existing TypeScript projects
-- Configuring tooling (tsup, Vitest, ESLint, Prettier)
-- Setting up dual module format
+- Chrome/Edge 90+
+- Firefox 88+
+- Safari 14+
 
-**Installation** (for use in other projects):
+## Performance Notes
 
-```bash
-# Copy the skill to your Claude Code skills directory
-cp -r .claude/skills/typescript-standards ~/.claude/skills/
+- Optimized for 60 FPS rendering
+- Code splitting for Three.js, Globe.gl, React, and Mantine
+- Lazy loading of dataset APIs
+- Sample data fallback for offline demos
 
-# Or if using plugins/marketplace
-# See .claude-plugin/marketplace.json for distribution configuration
-```
+## Troubleshooting
 
-**References**:
+### Globe not visible
 
-- [CLAUDE.md](./CLAUDE.md) - Development guidance for this project
-- [STANDARDIZATION_GUIDE.md](./STANDARDIZATION_GUIDE.md) - Guide for applying these patterns to existing projects
-- [.claude/skills/typescript-standards/](./. claude/skills/typescript-standards/) - Complete skill documentation
+- Check browser console for CORS errors
+- Ensure HTTPS URLs are used for globe textures
+- Verify WebGL is enabled in browser
 
----
+### Wildfires showing sample data only
 
-_This template is based on the earlier work of https://github.com/orabazu/tsup-library-template but updated with modern tooling and standardized scripts._
+- Verify API key is configured correctly
+- Check `.env` file exists with `VITE_NASA_FIRMS_API_KEY`
+- Restart dev server after adding environment variables
+
+### Data not loading
+
+- Check internet connection
+- Verify API endpoints are accessible
+- Look for CORS errors in browser console
+- Check if API services are operational
+
+## License
+
+MIT
+
+## Educational Use
+
+This project was built to demonstrate AI-assisted development capabilities at the ACTON STEM exhibit, showing how modern AI tools can accelerate complex 3D application development from weeks to hours.

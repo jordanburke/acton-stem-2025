@@ -8,7 +8,18 @@ interface InfoPanelProps {
 }
 
 export function InfoPanel({ totalPoints, dataset, maxMagnitude, avgMagnitude }: InfoPanelProps) {
-  const datasetLabel = dataset === "sample" ? "Sample Data" : "Earthquakes (Last 30 Days)"
+  const datasetLabels: Record<string, string> = {
+    mountains: "Mountains (Over 1000m)",
+    earthquakes: "Earthquakes (Last 30 Days)",
+    wildfires: "Wildfires (Last 24 Hours)",
+  }
+
+  const datasetLabel = datasetLabels[dataset] || dataset
+
+  const maxLabel =
+    dataset === "wildfires" ? "Max FRP (MW)" : dataset === "mountains" ? "Highest Peak (m)" : "Max Magnitude"
+  const avgLabel =
+    dataset === "wildfires" ? "Avg FRP (MW)" : dataset === "mountains" ? "Avg Elevation (m)" : "Avg Magnitude"
 
   return (
     <Paper
@@ -52,7 +63,7 @@ export function InfoPanel({ totalPoints, dataset, maxMagnitude, avgMagnitude }: 
         {maxMagnitude !== undefined && (
           <Group justify="space-between">
             <Text size="sm" c="dimmed">
-              Max Magnitude:
+              {maxLabel}:
             </Text>
             <Text size="sm" fw={600}>
               {maxMagnitude.toFixed(1)}
@@ -63,7 +74,7 @@ export function InfoPanel({ totalPoints, dataset, maxMagnitude, avgMagnitude }: 
         {avgMagnitude !== undefined && (
           <Group justify="space-between">
             <Text size="sm" c="dimmed">
-              Avg Magnitude:
+              {avgLabel}:
             </Text>
             <Text size="sm" fw={600}>
               {avgMagnitude.toFixed(1)}

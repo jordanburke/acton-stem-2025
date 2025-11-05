@@ -17,9 +17,9 @@ export class GlobeRenderer {
 
   private initializeGlobe(): void {
     this.globe = Globe()(this.container)
-      .globeImageUrl("//unpkg.com/three-globe/example/img/earth-blue-marble.jpg")
-      .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png")
-      .backgroundImageUrl("//unpkg.com/three-globe/example/img/night-sky.png")
+      .globeImageUrl("https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg")
+      .bumpImageUrl("https://unpkg.com/three-globe/example/img/earth-topology.png")
+      .backgroundImageUrl("https://unpkg.com/three-globe/example/img/night-sky.png")
       .width(this.container.clientWidth)
       .height(this.container.clientHeight)
 
@@ -43,11 +43,12 @@ export class GlobeRenderer {
   public setPoints(points: GlobePoint[]): void {
     if (!this.globe) return
 
+    // Use default pointsData for bars (all datasets: mountains, earthquakes, wildfires)
     this.globe
       .pointsData(points)
       .pointAltitude("size")
       .pointColor("color")
-      .pointRadius(1.0) // Increased from 0.5 to 1.0 for better visibility
+      .pointRadius(1.0)
       .pointLabel((d) => {
         const point = d as GlobePoint
         return point.label

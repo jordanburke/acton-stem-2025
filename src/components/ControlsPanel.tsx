@@ -43,8 +43,9 @@ export function ControlsPanel({
           value={dataset}
           onChange={onDatasetChange}
           data={[
-            { value: "sample", label: "Sample Data" },
+            { value: "mountains", label: "Mountains (Over 1000m)" },
             { value: "earthquakes", label: "Earthquakes (Last 30 Days)" },
+            { value: "wildfires", label: "Wildfires (Last 24 Hours)" },
           ]}
           comboboxProps={{ withinPortal: true, zIndex: 2000 }}
           styles={{
