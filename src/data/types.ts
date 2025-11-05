@@ -60,3 +60,30 @@ export interface GlobePoint {
   label: string
   data: unknown
 }
+
+// Molecule Viewer Types
+export interface Atom {
+  id: number
+  element: string // Chemical symbol (H, C, N, O, etc.)
+  position: [number, number, number] // 3D coordinates [x, y, z]
+  color: string // Hex color for rendering
+  radius: number // Van der Waals radius
+}
+
+export interface Bond {
+  atom1: number // Atom ID
+  atom2: number // Atom ID
+  order: number // 1=single, 2=double, 3=triple
+}
+
+export interface Molecule {
+  id: string
+  name: string
+  description: string
+  formula: string // Chemical formula (e.g., "H2O")
+  atomCount: number
+  bondCount: number
+  atoms: Atom[]
+  bonds: Bond[]
+  category: "protein" | "dna" | "small-molecule" | "complex"
+}

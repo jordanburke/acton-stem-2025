@@ -37,9 +37,12 @@
   "dependencies": {
     "@mantine/core": "^8.3.6",
     "@mantine/hooks": "^7.17.8",
+    "@react-three/drei": "^10.7.6",
+    "@react-three/fiber": "^9.4.0",
     "globe.gl": "^2.45.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.5",
     "three": "^0.181.0"
   },
   "devDependencies": {
