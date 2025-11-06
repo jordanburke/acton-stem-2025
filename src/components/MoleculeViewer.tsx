@@ -118,7 +118,11 @@ function MoleculeStructure({ molecule }: { molecule: Molecule }) {
 
 export function MoleculeViewer({ molecule, autoRotate = true }: MoleculeViewerProps) {
   return (
-    <Canvas style={{ width: "100%", height: "100%", background: "#000000" }}>
+    <Canvas
+      style={{ width: "100%", height: "100%", background: "#000000" }}
+      role="img"
+      aria-label={`3D molecular structure of ${molecule.name} - ${molecule.description}`}
+    >
       {/* Camera */}
       <PerspectiveCamera makeDefault position={[0, 0, 15]} />
 

@@ -1,6 +1,6 @@
 import { LoadingOverlay } from "@mantine/core"
 import { createFileRoute } from "@tanstack/react-router"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import { ControlsPanel } from "../components/ControlsPanel"
 import { Globe } from "../components/Globe"
@@ -21,7 +21,7 @@ function GlobeDemo() {
     avgMagnitude?: number
   }>({ total: 0 })
 
-  const handleLoadData = async () => {
+  const handleLoadData = useCallback(async () => {
     if (dataset === "mountains") {
       const mountainPoints = convertMountainsToPoints()
       const mountainStats = getMountainStats()
@@ -69,7 +69,7 @@ function GlobeDemo() {
         setLoading(false)
       }
     }
-  }
+  }, [dataset])
 
   const handleDatasetChange = (value: string | null) => {
     if (value) {
@@ -80,8 +80,7 @@ function GlobeDemo() {
   // Auto-load data when dataset changes
   useEffect(() => {
     handleLoadData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataset])
+  }, [handleLoadData])
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>

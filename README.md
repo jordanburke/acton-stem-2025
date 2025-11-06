@@ -5,6 +5,7 @@ A multi-demo educational exhibit featuring two interactive 3D visualizations: an
 ## Features
 
 ### 3D Globe Visualization
+
 - **Interactive 3D Globe**: Rotate and zoom with mouse/touch controls
 - **Multiple Datasets**:
   - **Mountains**: 14 highest peaks over 1000m with elevation visualization
@@ -14,11 +15,22 @@ A multi-demo educational exhibit featuring two interactive 3D visualizations: an
 - **Responsive Controls**: Dataset selection and rotation speed adjustment
 
 ### 3D Molecule Viewer
+
 - **Interactive Molecular Structures**: View water, CO2, DNA, and protein molecules in 3D
 - **Realistic Rendering**: Atoms with accurate colors and Van der Waals radii
 - **Bond Visualization**: Single, double, and triple bonds with proper geometry
 - **Auto-Rotation**: Toggle automatic rotation for better viewing
 - **Atom Legend**: Color-coded guide for chemical elements
+
+### Auto-Cycle Mode (NEW!)
+
+- **Automatic Presentation**: Cycles through all 7 visualizations automatically
+- **Configurable Duration**: 5-30 seconds per view (default: 10s)
+- **Playback Controls**: Play, pause, skip forward/backward
+- **Progress Indicator**: Visual progress bar showing time remaining
+- **Keyboard Shortcuts**: Space (play/pause), Arrow keys (skip)
+- **Data Prefetching**: Seamless transitions with cached data
+- **Cycle Order**: Mountains → Earthquakes → Wildfires → Water → CO2 → DNA → Hemoglobin
 
 ## Quick Start
 
@@ -88,6 +100,7 @@ The app will automatically use sample wildfire data (5 demo fires) if no API key
 - **Vite** - Build tool and dev server
 - **TanStack Router** - Type-safe file-based routing
 - **Mantine UI v8** - Component library with dark theme
+- **Tabler Icons** - Icon library for UI controls
 - **Three.js** - 3D graphics engine
 - **Globe.gl** - 3D globe visualization (imperative API)
 - **React Three Fiber** - Declarative Three.js for molecule viewer
@@ -191,10 +204,12 @@ src/
 
 ## Performance Notes
 
-- Optimized for 60 FPS rendering
-- Code splitting for Three.js, Globe.gl, React, and Mantine
-- Lazy loading of dataset APIs
-- Sample data fallback for offline demos
+- **60 FPS Target**: Optimized for live exhibit display
+- **Data Prefetching**: Auto-cycle mode prefetches all async data for seamless transitions
+- **Code Splitting**: Separate chunks for Three.js, Globe.gl, React, Mantine
+- **Lazy Loading**: Dataset APIs fetched on-demand when selected
+- **Sample Data Fallback**: Offline capability for internet failures at events
+- **Memory Management**: Proper cleanup of event listeners and intervals
 
 ## Troubleshooting
 

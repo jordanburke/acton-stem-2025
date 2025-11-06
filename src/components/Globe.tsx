@@ -43,6 +43,8 @@ export function Globe({ points, rotationSpeed }: GlobeProps) {
     <div
       id="globe-container"
       ref={containerRef}
+      role="img"
+      aria-label="Interactive 3D globe visualization showing global data points"
       style={{
         width: "100%",
         height: "100%",

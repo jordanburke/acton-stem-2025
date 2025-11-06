@@ -1,6 +1,5 @@
 import { AppShell, Group, Tabs, Title } from "@mantine/core"
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router"
-import { useLocation, useNavigate } from "@tanstack/react-router"
+import { createRootRoute, Outlet, useLocation, useNavigate } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 
 function RootComponent() {
@@ -26,6 +25,7 @@ function RootComponent() {
             <Tabs.List>
               <Tabs.Tab value="globe">3D Globe</Tabs.Tab>
               <Tabs.Tab value="molecules">Molecules</Tabs.Tab>
+              <Tabs.Tab value="auto-cycle">Auto-Cycle</Tabs.Tab>
               <Tabs.Tab value="dashboard">Dashboard</Tabs.Tab>
             </Tabs.List>
           </Tabs>

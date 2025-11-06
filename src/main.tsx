@@ -3,9 +3,9 @@ import "@mantine/core/styles.layer.css"
 import { createTheme, MantineProvider } from "@mantine/core"
 import { createRouter, RouterProvider } from "@tanstack/react-router"
 import { StrictMode } from "react"
-import React from "react"
 import { createRoot } from "react-dom/client"
 
+import { ErrorBoundary } from "./components/ErrorBoundary"
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen"
 
@@ -30,8 +30,10 @@ const root = createRoot(document.getElementById("root")!)
 
 root.render(
   <StrictMode>
-    <MantineProvider theme={theme} defaultColorScheme="dark">
-      <RouterProvider router={router} />
-    </MantineProvider>
+    <ErrorBoundary>
+      <MantineProvider theme={theme} defaultColorScheme="dark">
+        <RouterProvider router={router} />
+      </MantineProvider>
+    </ErrorBoundary>
   </StrictMode>,
 )

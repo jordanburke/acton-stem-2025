@@ -5,6 +5,7 @@ import type { GlobePoint } from "../data/types"
 export class GlobeRenderer {
   private globe: ReturnType<typeof Globe> | null = null
   private container: HTMLElement
+  private handleResizeBound: () => void
 
   constructor(containerId: string) {
     const element = document.getElementById(containerId)
@@ -12,6 +13,7 @@ export class GlobeRenderer {
       throw new Error(`Container element with id "${containerId}" not found`)
     }
     this.container = element
+    this.handleResizeBound = this.handleResize.bind(this)
     this.initializeGlobe()
   }
 
@@ -31,7 +33,7 @@ export class GlobeRenderer {
     this.globe.controls().autoRotateSpeed = 0.1
 
     // Handle window resize
-    window.addEventListener("resize", this.handleResize.bind(this))
+    window.addEventListener("resize", this.handleResizeBound)
   }
 
   private handleResize(): void {
@@ -66,7 +68,7 @@ export class GlobeRenderer {
   }
 
   public destroy(): void {
-    window.removeEventListener("resize", this.handleResize.bind(this))
+    window.removeEventListener("resize", this.handleResizeBound)
     if (this.globe) {
       // Globe.gl doesn't have a built-in destroy method, but we can clear the container
       this.container.innerHTML = ""
