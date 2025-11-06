@@ -68,6 +68,7 @@ export interface Atom {
   position: [number, number, number] // 3D coordinates [x, y, z]
   color: string // Hex color for rendering
   radius: number // Van der Waals radius
+  simplified?: boolean // If true, atom represents simplified/educational model (not exact composition)
 }
 
 export interface Bond {
