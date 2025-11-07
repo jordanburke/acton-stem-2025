@@ -267,6 +267,73 @@ This approach preserves all existing route UI (InfoPanel, ControlsPanel, Molecul
 - Look for CORS errors in browser console
 - Check if API services are operational
 
+## Deployment to Cloudflare Pages
+
+This project is optimized for deployment on Cloudflare Pages.
+
+### Prerequisites
+
+- Node.js 22.12+ required (configured in `.nvmrc`)
+- Cloudflare Pages account
+
+### Environment Variables
+
+Configure the NASA FIRMS API key in Cloudflare Pages:
+
+1. Go to your Cloudflare Pages project settings
+2. Navigate to **Settings → Environment Variables**
+3. Add variable:
+   - **Variable name**: `VITE_NASA_FIRMS_API_KEY`
+   - **Value**: Your NASA FIRMS API key (see setup above)
+   - **Environment**: Production and Preview (or both)
+4. Redeploy or trigger a new build
+
+**Important**: Vite environment variables are injected at **build time**, not runtime. The variable must be set before the build runs.
+
+### Build Configuration
+
+The project uses the following build settings (auto-detected by Cloudflare Pages):
+
+- **Build command**: `pnpm validate` (runs format, lint, test, and build)
+- **Build output directory**: `dist`
+- **Node version**: 22.12.0 (from `.nvmrc`)
+
+### Security Considerations
+
+**Note**: `VITE_*` environment variables are embedded in the client-side JavaScript bundle and are publicly visible. This is acceptable for NASA FIRMS API keys since:
+
+- Free tier API with public data
+- Rate-limited per key
+- Keys can be rotated if needed
+
+For sensitive APIs, use a backend proxy instead of exposing keys in the client bundle.
+
+### Deployment Checklist
+
+- [ ] Node.js version set to 22.12+ in `.nvmrc`
+- [ ] NASA API key configured in Cloudflare environment variables
+- [ ] Build command set to `pnpm validate`
+- [ ] Output directory set to `dist`
+- [ ] Preview deployment tested before production
+
+### Troubleshooting Deployments
+
+**Build fails with Node.js version error:**
+
+- Verify `.nvmrc` contains `22.12.0` or higher
+- Check Cloudflare Pages build logs for Node.js version
+
+**Wildfires show sample data instead of real-time data:**
+
+- Verify environment variable is named exactly `VITE_NASA_FIRMS_API_KEY`
+- Check that variable is set for the correct environment (Production/Preview)
+- Trigger a new build after adding the variable (rebuilds inject the variable)
+
+**TanStack Router devtools appear in production:**
+
+- This should be fixed - devtools are now conditionally rendered
+- Clear browser cache and hard refresh (Ctrl+Shift+R)
+
 ## License
 
 MIT

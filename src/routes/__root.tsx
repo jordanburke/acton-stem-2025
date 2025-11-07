@@ -70,7 +70,7 @@ function RootComponent() {
 
         <AutoCycleOverlay />
 
-        <TanStackRouterDevtools />
+        {import.meta.env.DEV && <TanStackRouterDevtools />}
       </AppShell>
     </AutoCycleProvider>
   )
